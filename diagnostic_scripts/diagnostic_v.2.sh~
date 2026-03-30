@@ -1,0 +1,130 @@
+#!/bin/bash
+
+# Константы и настройки
+ASCII_ART=(
+" ██████╗ ██╗  ██╗██╗  ██╗███████╗██╗  ██╗ █████╗ ██╗  ██╗██████╗ "
+"██╔═████╗╚██╗██╔╝██║  ██║██╔════╝██║  ██║██╔══██╗██║  ██║██╔══██╗"
+"██║██╔██║ ╚███╔╝ ███████║█████╗  ███████║╚██████║███████║██████╔╝"
+"████╔╝██║ ██╔██╗ ╚════██║██╔══╝  ╚════██║ ╚═══██║╚════██║██╔══██╗"
+"╚██████╔╝██╔╝ ██╗     ██║███████╗     ██║ █████╔╝     ██║██████╔╝"
+" ╚═════╝ ╚═╝  ╚═╝     ╚═╝╚══════╝     ╚═╝ ╚════╝     ╚═╝╚══════╝"
+)
+
+LOG_FILE="/var/log/net_diag.log"
+DNS_SERVERS=("8.8.8.8" "1.1.1.1")
+#INTERFACES=("venet0")
+INTERFACES=("enp3s0")
+
+# Настройки тестов
+PING_COUNT=5
+PONG_COUNT=5
+ICMP_PACKETS=10
+TEST_DURATION=5
+
+# Сетевые настройки
+IPV4_GATEWAYS=("10.0.0.1" "192.168.1.1" "192.168.5.1")
+IPV6_GATEWAY="2001:4860:4860::8888"
+
+# DNS и HTTP
+HTTP_DOMAIN="ifconfig.me"
+
+# Временные ограничения
+TIMEOUT=5
+
+# Тело скрипта
+echo "${ASCII_ART[0]}"
+echo "${ASCII_ART[1]}"
+echo "${ASCII_ART[2]}"
+echo "${ASCII_ART[3]}"
+echo "${ASCII_ART[4]}"
+echo "${ASCII_ART[5]}"
+
+# Заголовок скрипта
+echo "===🔔 СКРИПТ ДИАГНОСТИКИ СЕТИ ==="
+echo "Начало работы: $(date)"
+echo -n "Логирование в: ${LOG_FILE}"
+
+# Проверка прав
+if [ "$EUID" -ne 0 ]; then
+    echo "🔔 Этот скрипт должен быть запущен от имени root."
+    exit 1
+else
+    echo "✅"	
+fi
+
+# Тестирование функционирования интерфейсов
+echo "===🔔 ТЕСТ СЕТЕВЫХ ИНТЕРФЕЙСОВ ==="
+for interface in "${INTERFACES[@]}"; do
+    echo "Проверка интерфейса: ${interface}"
+    ip link show "${interface}" &>> "${LOG_FILE}"
+    if [ $? -ne 0 ]; then
+        echo "❌ Ошибка: интерфейс ${interface} недоступен."
+        exit 1
+    else
+        echo "✅"
+    fi
+done
+
+# Тестирование DNS
+echo "===🔔 ТЕСТ DNS ==="
+for dns_server in "${DNS_SERVERS[@]}"; do
+    echo "Проверка DNS-сервера: ${dns_server}"
+    dig @${dns_server} example.com &>> "${LOG_FILE}"
+    if [ $? -ne 0 ]; then
+        echo "❌ Ошибка: DNS-сервер ${dns_server} недоступен."
+        exit 1
+    else
+        echo "✅" 
+    fi
+done
+
+# Тестирование HTTP
+echo "=== 🔔ТЕСТ HTTP ==="
+echo "Проверка доступности HTTP-сервера: ${HTTP_DOMAIN}"
+curl -I "http://${HTTP_DOMAIN}" &>> "${LOG_FILE}"
+if [ $? -ne 0 ]; then
+    echo "❌ Ошибка: HTTP-сервер ${HTTP_DOMAIN} недоступен."
+    exit 1
+else
+    echo "✅" 
+fi
+
+# Тестирование IPv4 шлюзов
+echo "===🔔 ТЕСТ IPv4 ШЛЮЗОВ ==="
+for gateway in "${IPV4_GATEWAYS[@]}"; do
+    echo "Проверка IPv4 шлюза: ${gateway}"
+    ping -c 3 -W ${TIMEOUT} ${gateway} &>> "${LOG_FILE}"
+    if [ $? -ne 0 ]; then
+        echo "❌ Ошибка: IPv4 шлюз ${gateway} недоступен."
+    else
+        echo "✅" 
+    fi
+done
+
+# Тестирование IPv6 (если есть поддержка)
+if command -v ping6 &> /dev/null; then
+    echo "=== 🔔 ТЕСТ IPV6 ШЛЮЗА ==="
+    echo "Проверка IPv6 шлюза: ${IPV6_GATEWAY}"
+    ping6 -c 3 -W ${TIMEOUT} ${IPV6_GATEWAY} &>> "${LOG_FILE}"
+    if [ $? -ne 0 ]; then
+        echo "❌ Ошибка: IPv6 шлюз ${IPV6_GATEWAY} недоступен."
+    else
+        echo "✅" 
+    fi
+fi
+
+# Тестирование пакетов на TX
+echo "===🔔 ТЕСТ ПАКЕТОВ НА TX ==="
+TX_BEFORE=$(ip -s link show ${INTERFACES[0]} | awk 'NR==4 {print $3}')
+sleep 1
+TX_AFTER=$(ip -s link show ${INTERFACES[0]} | awk 'NR==4 {print $3}')
+
+if [ $TX_AFTER -gt $TX_BEFORE ]; then
+    echo "✅ Ok! Пакеты УХОДЯТ с интерфейса (TX вырос на $((TX_AFTER - TX_BEFORE)))"
+else
+    echo "❌ Fail! Пакеты НЕ УХОДЯТ с интерфейса (TX не изменился)"
+fi
+
+# Завершение скрипта
+echo "===👽 СКРИПТ ЗАВЕРШЕН ==="
+echo "Дата завершения: $(date)"
