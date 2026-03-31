@@ -42,7 +42,7 @@ echo "${ASCII_ART[5]}"
 # Заголовок скрипта
 echo "===🔔 СКРИПТ ДИАГНОСТИКИ СЕТИ ==="
 echo "Начало работы: $(date)"
-echo -n "Логирование в: ${LOG_FILE}"
+echo -n "Логирование в: ${LOG_FILE} "
 
 # Проверка прав
 if [ "$EUID" -ne 0 ]; then
@@ -55,7 +55,7 @@ fi
 # Тестирование функционирования интерфейсов
 echo "===🔔 ТЕСТ СЕТЕВЫХ ИНТЕРФЕЙСОВ ==="
 for interface in "${INTERFACES[@]}"; do
-    echo "Проверка интерфейса: ${interface}"
+    echo -n "Проверка интерфейса: ${interface} "
     ip link show "${interface}" &>> "${LOG_FILE}"
     if [ $? -ne 0 ]; then
         echo "❌ Ошибка: интерфейс ${interface} недоступен."
@@ -68,7 +68,7 @@ done
 # Тестирование DNS
 echo "===🔔 ТЕСТ DNS ==="
 for dns_server in "${DNS_SERVERS[@]}"; do
-    echo "Проверка DNS-сервера: ${dns_server}"
+    echo -n "Проверка DNS-сервера: ${dns_server} "
     dig @${dns_server} example.com &>> "${LOG_FILE}"
     if [ $? -ne 0 ]; then
         echo "❌ Ошибка: DNS-сервер ${dns_server} недоступен."
@@ -80,7 +80,7 @@ done
 
 # Тестирование HTTP
 echo "=== 🔔ТЕСТ HTTP ==="
-echo "Проверка доступности HTTP-сервера: ${HTTP_DOMAIN}"
+echo -n "Проверка доступности HTTP-сервера: ${HTTP_DOMAIN}"
 curl -I "http://${HTTP_DOMAIN}" &>> "${LOG_FILE}"
 if [ $? -ne 0 ]; then
     echo "❌ Ошибка: HTTP-сервер ${HTTP_DOMAIN} недоступен."
@@ -92,7 +92,7 @@ fi
 # Тестирование IPv4 шлюзов
 echo "===🔔 ТЕСТ IPv4 ШЛЮЗОВ ==="
 for gateway in "${IPV4_GATEWAYS[@]}"; do
-    echo "Проверка IPv4 шлюза: ${gateway}"
+    echo -n "Проверка IPv4 шлюза: ${gateway} "
     ping -c 3 -W ${TIMEOUT} ${gateway} &>> "${LOG_FILE}"
     if [ $? -ne 0 ]; then
         echo "❌ Ошибка: IPv4 шлюз ${gateway} недоступен."
@@ -104,7 +104,7 @@ done
 # Тестирование IPv6 (если есть поддержка)
 if command -v ping6 &> /dev/null; then
     echo "=== 🔔 ТЕСТ IPV6 ШЛЮЗА ==="
-    echo "Проверка IPv6 шлюза: ${IPV6_GATEWAY}"
+    echo -n "Проверка IPv6 шлюза: ${IPV6_GATEWAY} "
     ping6 -c 3 -W ${TIMEOUT} ${IPV6_GATEWAY} &>> "${LOG_FILE}"
     if [ $? -ne 0 ]; then
         echo "❌ Ошибка: IPv6 шлюз ${IPV6_GATEWAY} недоступен."
@@ -114,7 +114,7 @@ if command -v ping6 &> /dev/null; then
 fi
 
 # Тестирование пакетов на TX
-echo "===🔔 ТЕСТ ПАКЕТОВ НА TX ==="
+echo -n "===🔔 ТЕСТ ПАКЕТОВ НА TX === "
 TX_BEFORE=$(ip -s link show ${INTERFACES[0]} | awk 'NR==4 {print $3}')
 sleep 1
 TX_AFTER=$(ip -s link show ${INTERFACES[0]} | awk 'NR==4 {print $3}')
