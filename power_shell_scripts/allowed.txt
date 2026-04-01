@@ -1,0 +1,72 @@
+Microsoft Windows
+Microsoft Windows Server
+Linux Debian
+Dr.Web Enterprise Security Suite
+Secret Net LSP
+Secret Net Studio
+ViPNet Administrator
+ViPNet Coordinator HW 4
+ViPNet CSP 4
+Сканер-ВС
+Microsoft Office Home and Business
+Microsoft Office Professional Plus
+Adobe Acrobat
+LibreOffice
+WinMerge
+WinSCP
+AnyDesk
+Google Chrome
+Yandex Browser
+Microsoft Edge
+Mozilla Firefox
+Vivaldi
+Notepad++
+AkelPad
+7-Zip
+IrfanView
+Microsoft Visual C++
+Python Launcher
+Visual Studio Code
+Microsoft SQL Server Compact
+DBeaver
+Punto Switcher
+Nmap
+Friendly Pinger
+Postman
+Sublime Merge
+PuTTY release 0.74
+HeidiSQL
+Docker Desktop
+Sublime Text
+Git
+OWASP Zed Attack Proxy
+Total Commander
+FARManager
+Wireshark
+Paint.NET
+Figma
+Kaspersky Password Manager
+KeePass
+Sysinternals Suite
+Burp Suite Community Edition
+Mozilla Thunderbird
+Reverso
+Windows Terminal
+VokoscreenNG
+Canon MF Scan Utility
+Canon Laser Printer/Scanner/Fax Extended Survey Program
+HP CIO Components Installer
+Ricoh HowToGuide
+Ricoh ControlCenter4 CSDK
+Ricoh ControlCenter4
+Ricoh BrSupportTools
+Ricoh PCFaxTx
+RICOH Printer Driver
+RICOH Scanner Driver
+Ricoh Port Driver
+RICOH PCFax Driver
+Ricoh ScannerUtilityInstaller
+Ricoh StatusMonitor
+Ricoh PC-FAXReceive
+Ricoh BrLauncher
+Ricoh RemoteSetup
