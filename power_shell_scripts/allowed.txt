@@ -50,7 +50,6 @@ KeePass
 Sysinternals Suite
 Burp Suite Community Edition
 Mozilla Thunderbird
-Reverso
 Windows Terminal
 VokoscreenNG
 Canon MF Scan Utility
