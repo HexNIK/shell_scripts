@@ -1,0 +1,9 @@
+wsl -l -v
+wsl --unregister <Имя_Дистрибутива>
+
+Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+Disable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
+
+dism.exe /online /get-features /format:table | findstr /c:"Microsoft-Windows-Subsystem-Linux"
+
+Get-Package -Name "Windows Subsystem for Linux" | Uninstall-Package
