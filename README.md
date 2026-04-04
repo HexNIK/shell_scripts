@@ -2,7 +2,7 @@
 Yet another shell scripts collection ...
 
 ---
-
+```
 ├── diagnostic_scripts #check network status
 │   ├── diagnostic_v.2.sh
 │   └── diagnostic_v.2.sh~
@@ -18,4 +18,4 @@ Yet another shell scripts collection ...
 │   ├── demo1.sh
 │   └── screen_stub.sh
 └── README.md
-
+```
