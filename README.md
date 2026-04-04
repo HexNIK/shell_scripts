@@ -3,7 +3,7 @@ Yet another shell scripts collection ...
 
 ---
 
-├── diagnostic_scripts
+├── diagnostic_scripts #check network status
 │   ├── diagnostic_v.2.sh
 │   └── diagnostic_v.2.sh~
 ├── LICENSE

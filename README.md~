@@ -7,9 +7,9 @@ Yet another shell scripts collection ...
 │   ├── diagnostic_v.2.sh
 │   └── diagnostic_v.2.sh~
 ├── LICENSE
-├── network_scripts
+├── network_scripts #reload dirver 4 r8169
 │   └── reset_r8169.sh
-├── power_shell_scripts
+├── power_shell_scripts #check installed soft on windows
 │   ├── allowed.txt
 │   ├── Audit-Software.ps1
 │   └── del_wsl.txt
